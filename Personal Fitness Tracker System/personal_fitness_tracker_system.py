@@ -9,6 +9,36 @@ calories = []  # To store calorie intake for meals
 workout_goal = 0  # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
+def workout_calculations(workouts_list):
+    """
+    Workout calculations.
+    - Calculate all data needed for progres.
+    """
+    # Header of "table"
+    table = '🏋️ Workout  ⏱️ \n'
+    workouts_count = 0
+    total_duration = 0
+    longest_workout_list = []
+    longest_workout, longest_workout_index = 0, 0
+
+    #Loop for separate workouts and duration
+    for index in range(len(workouts_list)):
+        if index % 2 == 0:
+            workouts_count += 1
+            table += f'  {workouts_list[index]} - '
+        else:
+            total_duration += workouts_list[index]
+            table += f'{workouts_list[index]} min \n'
+            if workouts_list[index] > longest_workout:
+                longest_workout = workouts_list[index]
+                longest_workout_index = index
+
+    longest_workout_list.append(workouts_list[longest_workout_index - 1])
+    longest_workout_list.append(workouts_list[longest_workout_index])
+
+
+    return table, workouts_count, total_duration, longest_workout_list
+
 
 def log_workout(workout_type, duration):
     """
@@ -46,38 +76,26 @@ def view_progress():
     """
     # Summary -> Workout -> Calories
     # Check for recorded workout.
+
     if not workouts:
-        return print('You don\'t have@ any workouts recorded yet')
+        return print('You don\'t have any workouts recorded yet')
 
-    # Header of "table"
-    table = '🏋️ Workout / ⏱️ Duration\n'
-    workouts_count = 0
-    total_duration = 0
-    longest_workout, longest_workout_index = 0, 0
+    workouts_data = workout_calculations(workouts)
 
-    #Loop for separate workouts and duration
-
-    for index in range(len(workouts)):
-        if index % 2 == 0:
-            workouts_count += 1
-            table += f'  {workouts[index]} - '
-        else:
-            total_duration += workouts[index]
-            table += f'{workouts[index]} min \n'
-            if workouts[index] > longest_workout:
-                longest_workout = workouts[index]
-                longest_workout_index = index
-
-    # Take top activity
-    print(f'Longest workout {workouts[longest_workout_index-1]} - '
-          f'{workouts[longest_workout_index]} min' )
+    table = workouts_data[0]
+    workouts_count = workouts_data[1]
+    total_duration = workouts_data[2]
+    longest_workout = workouts_data[3]
 
     # Printing summary info for workouts
+    print('📊 Let\'s see a summary view of all you\'r workouts.\n')
+    print('▫️All your training until the moment:\n')
     print(table)
-    print(f'TOTAL: {total_duration} min for {workouts_count} workouts.')
-    print(f'Average duration of workout: {total_duration/workouts_count:.0f} min.')
+    print(f'▫️So far you have {workouts_count} workouts with a total duration {total_duration} mins.')
+    print(f'▫️Average duration per workout: {total_duration/workouts_count:.0f} min.')
+    print(f'▫️Yo\'re best workout is {longest_workout[0].lower()} with {longest_workout[1]} min duration!\n')
 
-    process = input("Press ENTER to continue..")
+    input("Press ENTER to continue..")
 
     pass
 
@@ -133,8 +151,8 @@ def main():
 
         if choice == '1':
             # Prompt for workout type and duration
-            type =''
-            duraiton = 0
+            type_of_workout = ''
+            duration = 0
             while True:
                 workout_choose = input('Choose a workout from the menu, you can save your own workout by choosing "Other":\n\n'
                       '1. 🏃‍♂️ Running\n'
@@ -145,15 +163,15 @@ def main():
                       'You\'r choice: ')
 
                 if workout_choose == '1':
-                    type = 'Running'
+                    type_of_workout = 'Running'
                 elif workout_choose == '2':
-                    type = 'Cycling'
+                    type_of_workout = 'Cycling'
                 elif workout_choose == '3':
-                    type = 'Walking'
+                    type_of_workout = 'Walking'
                 elif workout_choose == '4':
-                    type = 'Fitness'
+                    type_of_workout = 'Fitness'
                 elif workout_choose == '5':
-                    type = input('Training type: ')
+                    type_of_workout = input('Training type: ')
 
                 else:
                     print('⭕ Invalid choice!')
@@ -161,15 +179,15 @@ def main():
                 break
 
             while True:
-                duraiton_choose = int(input('⏳ Workout Duration [min]: '))
-                if 0 < duraiton_choose < MAX_DURATION:
-                    duraiton = duraiton_choose
+                duration_choose = int(input('⏳ Workout Duration [min]: '))
+                if 0 < duration_choose < MAX_DURATION:
+                    duration = duration_choose
                     break
                 else:
-                    print(f'Invalid Duration {duraiton_choose} min. The duration must be between 1 and {MAX_DURATION} minutes. ')
+                    print(f'Invalid Duration {duration_choose} min. The duration must be between 1 and {MAX_DURATION} minutes. ')
                     continue
 
-            log_workout(type, duraiton)
+            log_workout(type_of_workout, duration)
 
 
             pass
