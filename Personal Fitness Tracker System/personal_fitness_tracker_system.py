@@ -80,24 +80,17 @@ def view_progress():
     if not workouts:
         return print('You don\'t have any workouts recorded yet')
 
-    workouts_data = workout_calculations(workouts)
+    # Get data by calling a function workout_calculations with argument workouts list.
+    table, workouts_count, total_duration, longest_workout = workout_calculations(workouts)
 
-    table = workouts_data[0]
-    workouts_count = workouts_data[1]
-    total_duration = workouts_data[2]
-    longest_workout = workouts_data[3]
 
     # Printing summary info for workouts
     print('📊 Let\'s see a summary view of all you\'r workouts.\n')
-    print('▫️All your training until the moment:\n')
-    print(table)
+    print('▫️All your training until the moment:\n' + table)
     print(f'▫️So far you have {workouts_count} workouts with a total duration {total_duration} mins.')
     print(f'▫️Average duration per workout: {total_duration/workouts_count:.0f} min.')
     print(f'▫️Yo\'re best workout is {longest_workout[0].lower()} with {longest_workout[1]} min duration!\n')
-
     input("Press ENTER to continue..")
-
-    pass
 
 
 def reset_progress():
@@ -136,7 +129,7 @@ def main():
 
     while True:
         # Print workouts list to check for working
-        print(workouts)
+#        print(workouts) # print workouts just for "log workout" test.
 
         # Display menu options
         print("1. Log Workout")
