@@ -1,3 +1,5 @@
+from get_calorie import nutri_list
+
 # Personal Fitness Tracker System 🏋️‍♂️
 
 MAX_DURATION = 400
@@ -65,6 +67,11 @@ def log_calorie_intake(calories_consumed):
     - Append the calorie amount to the calories list.
     - Print a confirmation message.
     """
+    print('These are the meals you want to add so far:')
+
+
+
+
     pass
 
 
@@ -186,6 +193,37 @@ def main():
             pass
         elif choice == '2':
             # Prompt for calories consumed
+            print("Add your meals to date. The meals should be in a format for example 150g chicken,\n "
+                  "the program will calculate the calories itself..")
+
+            meal_input = ''
+            total_meals = []
+            meal_list = []
+            while meal_input != 'exit':
+                meal_input = input("Your meal: ").lower()
+
+                meal_list = nutri_list(meal_input)
+
+                if not meal_list or 'error' in meal_list:
+                    print("Wrong input, try again!")
+                    continue
+
+                for index in range(len(meal_list)):
+                    if index % 2 == 0:
+                        print(f'{meal_list[index].title()} is', end=' ')
+                        total_meals.append(meal_list[index])
+                    else:
+                        print(f'{meal_list[index]} calories add other meals of input \'exit\' for end:')
+                        total_meals.append(meal_list[index])
+
+                log_calorie_intake(total_meals)
+
+
+
+
+
+
+
             pass
         elif choice == '3':
             # Call view_progress function
