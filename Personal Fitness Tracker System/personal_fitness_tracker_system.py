@@ -11,35 +11,47 @@ calories = []  # To store calorie intake for meals
 workout_goal = 0  # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
-def workout_calculations(workouts_list):
+def calculations(data_list, parameter): # First argument list [meal/wo, 99], second str 'workout'/'meal'
     """
-    Workout calculations.
+    Calculations.
     - Calculate all data needed for progres.
     """
-    # Header of "table"
-    table = '🏋️ Workout  ⏱️ \n'
-    workouts_count = 0
-    total_duration = 0
-    longest_workout_list = []
-    longest_workout, longest_workout_index = 0, 0
+    # Defalt table
+    table = ' ===   === \n'
+    # Check header of table
+    if parameter == 'workout':
+        table = '🏋️ Workout  ⏱️ \n' # Table header if parameter is 'workout'
+    elif parameter == 'meal':
+        table = '🥓️ Meal    ⚡⚡⚡\n' # Table header if parameter is 'meal'
 
-    #Loop for separate workouts and duration
-    for index in range(len(workouts_list)):
+
+    count = 0 # Count str values
+    total = 0 # Sum of numeric values
+    best_list = [] # List with two items
+    best, best_index = 0, 0 # 'best' is the highest value in list, best_index is his index or index-1 is TEXT of highest value
+
+    #Loop for separate workouts/meals and duration/calories
+    for index in range(len(data_list)):
+
+        # Calories or Minutes [number]
         if index % 2 == 0:
-            workouts_count += 1
-            table += f'  {workouts_list[index]} - '
+            count += 1
+            table += f'  {data_list[index]} - '
         else:
-            total_duration += workouts_list[index]
-            table += f'{workouts_list[index]} min \n'
-            if workouts_list[index] > longest_workout:
-                longest_workout = workouts_list[index]
-                longest_workout_index = index
 
-    longest_workout_list.append(workouts_list[longest_workout_index - 1])
-    longest_workout_list.append(workouts_list[longest_workout_index])
+        # Meal or Workout [text]
+            total += data_list[index]
+            table += f'{data_list[index]} \n'
+            if data_list[index] > best:
+                best = data_list[index]
+                best_index = index
+
+    # Extract the highest workout/meal and append in best_list
+    best_list.append(data_list[best_index - 1])
+    best_list.append(data_list[best_index])
 
 
-    return table, workouts_count, total_duration, longest_workout_list
+    return table, count, total, best_list
 
 
 def log_workout(workout_type, duration):
@@ -67,12 +79,21 @@ def log_calorie_intake(calories_consumed):
     - Append the calorie amount to the calories list.
     - Print a confirmation message.
     """
-    print('These are the meals you want to add so far:')
+    meals = calculations(calories_consumed, 'meal')
+    meals_table = meals[0]
+    meals_count = meals[1]
+    meals_total = meals[2]
 
+    print(f'Do you want to save {meals_count} meals with total {meals_total} calories:\n')
+    print(f'{meals_table}')
+    save_meals = input("1. ✅ 2. ❌\n Enter your choice: ")
 
+    if save_meals == '1':
+        # Unpacked temporary list
+        [calories.append(meals) for meals in calories_consumed]
+    else:
+        print("The meals are not saved!\n")
 
-
-    pass
 
 
 def view_progress():
@@ -88,7 +109,8 @@ def view_progress():
         return print('You don\'t have any workouts recorded yet')
 
     # Get data by calling a function workout_calculations with argument workouts list.
-    table, workouts_count, total_duration, longest_workout = workout_calculations(workouts)
+    type = 'workout'
+    table, workouts_count, total_duration, longest_workout = calculations(workouts, type)
 
 
     # Printing summary info for workouts
@@ -194,37 +216,30 @@ def main():
         elif choice == '2':
             # Prompt for calories consumed
             print("Add your meals to date. The meals should be in a format for example 150g chicken,\n "
-                  "the program will calculate the calories itself..")
+                  "the program will calculate the calories itself..\n Enter a meal: ", end='')
 
             meal_input = ''
-            total_meals = []
-            meal_list = []
-            while meal_input != 'exit':
-                meal_input = input("Your meal: ").lower()
+            total_meals = [] # Meals for save
+            meal_list = [] # Temporary list
+            while meal_input != 's':
+                meal_input = input().lower()
 
                 meal_list = nutri_list(meal_input)
 
                 if not meal_list or 'error' in meal_list:
-                    print("Wrong input, try again!")
+                    print("Wrong input, try again!\n Enter a meal: ", end='')
                     continue
 
                 for index in range(len(meal_list)):
                     if index % 2 == 0:
                         print(f'{meal_list[index].title()} is', end=' ')
-                        total_meals.append(meal_list[index])
+                        total_meals.append(meal_list[index].title())
                     else:
-                        print(f'{meal_list[index]} calories add other meals of input \'exit\' for end:')
+                        print(f'{meal_list[index]} calories, add other meals or input \'s\' for save: ', end='')
                         total_meals.append(meal_list[index])
 
-                log_calorie_intake(total_meals)
-
-
-
-
-
-
-
-            pass
+            print('\n\n')
+            log_calorie_intake(total_meals) # Send a list for a calculations before being saved
         elif choice == '3':
             # Call view_progress function
             view_progress()
@@ -241,6 +256,8 @@ def main():
             break
         else:
             print("Invalid choice, please try again.")
+
+        print(calories)
 
 
 if __name__ == "__main__":
