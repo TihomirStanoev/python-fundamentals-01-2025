@@ -11,7 +11,7 @@ calories = []  # To store calorie intake for meals
 workout_goal = 0  # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
-def calculations(data_list, parameter): # First argument list [meal/wo, 99], second str 'workout'/'meal'
+def calculations(data_list, parameter): # First argument list, second str 'workout'/'meal'
     """
     Calculations.
     - Calculate all data needed for progres.
@@ -57,7 +57,7 @@ def calculations(data_list, parameter): # First argument list [meal/wo, 99], sec
     return table, count, total, best_list
 
 
-def log_workout(workout_type, duration):
+def log_workout(workout_type, duration): # Input srt, int
     """
     Log a workout.
     - Append the workout type and duration to the workouts list.
@@ -76,7 +76,7 @@ def log_workout(workout_type, duration):
         print("The workout is not saved!")
     print()
 
-def log_calorie_intake(calories_consumed):
+def log_calorie_intake(calories_consumed): # !Input list
     """
     Log calorie intake for a meal.
     - Append the calorie amount to the calories list.
