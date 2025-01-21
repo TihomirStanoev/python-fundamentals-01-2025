@@ -1,6 +1,5 @@
-from traceback import print_tb
-
 from get_calorie import nutri_list
+
 
 # Personal Fitness Tracker System 🏋️‍♂️
 
@@ -266,8 +265,6 @@ def reset_progress():
             return print("All progress is restarted!!!")
 
     return print("Aborted!!!")
-
-
 
 
 def set_daily_goals(workout_minutes, calorie_limit):
