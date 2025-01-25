@@ -64,15 +64,32 @@ def save_data(list_data, parameter):
                          f"1. ✅ 2. ❌\nEnter your choice: ")
 
     if save == '1' and parameter == 'meal':
-        [calories.append(meal) for meal in list_data]
+        calories.extend(list_data)
 
     elif save == '1' and parameter == 'workout':
-        [workouts.append(workout) for workout in list_data]
+        workouts.extend(list_data)
 
     else:
         return print(f'The {parameter} is not saved!')
 
     return print(f'\n💾  The {parameter} is saved successfully!' + '\n' * 3)
+
+
+def limitations():
+    """
+    Returns a message if the targets are out of limits
+    """
+    limit =  '''
+    “Goal Out of Limits 🚫
+    Oops! Your goal is outside the allowed range:
+    
+        Workout Goal: Must be between 0 and 1000 minutes.
+        Calorie Goal: Must be between 1200 and 5000 calories.
+    
+    Please adjust your goal to fit within the limits and try again. Let’s stay on track!”
+    '''
+
+    return limit
 
 
 def log_workout():
@@ -267,15 +284,39 @@ def reset_progress():
     return print("Aborted!!!")
 
 
-def set_daily_goals(workout_minutes, calorie_limit):
+def set_daily_goals():
     """
     Set daily goals for workout time and calorie intake.
     - Update the global variables workout_goal and calorie_goal.
     - Print a confirmation message.
     """
+    global workout_goal
+    global calorie_goal
 
+    print('\tSet Daily Goals 💪🔥\n')
 
-    pass
+    print('Take control of your fitness journey by '
+          'setting clear daily targets\n')
+    while True:
+        print('1. Set Workout Goal! 🏋️')
+        workout_goal = float(input('\tHow much time will you dedicate to breaking a sweat today (0 - ∞ min): '))
+        if workout_goal <= 0:
+            print(limitations())
+            continue
+        else:
+            print(f"Workout Goal is set to {workout_goal} min")
+            break
+    print()
+    while True:
+        print('2. Set Calorie Goal!')
+        calorie_goal = float(input('\tPlan your calorie intake or burn to stay on track.: '))
+        if calorie_goal <= 0 or calorie_goal >= 5000:
+            print(limitations())
+            continue
+        else:
+            print(f"Calories Goal is set to {calorie_goal} cal")
+            break
+
 
 
 def encouragement_system():
@@ -295,8 +336,7 @@ def main():
 
     while True:
         # Print workouts list to check for working
-        #        print(workouts) # print workouts just for "log workout" test.
-
+        print(calorie_goal)
         # Display menu options
         print("1. Log Workout")
         print("2. Log Calorie Intake")
@@ -307,6 +347,7 @@ def main():
 
         # Prompt user for their choice
         choice = input("\nEnter your choice: ")
+        print()
 
         if choice == '1':
             # Prompt for workout type and duration
@@ -328,6 +369,7 @@ def main():
 
         elif choice == '5':
             # Prompt for daily goals
+            set_daily_goals()
             pass
         elif choice == '6':
             # Print a goodbye message and break the loop
@@ -336,8 +378,8 @@ def main():
         else:
             print("Invalid choice, please try again.")
 
-        print(f'Calories list = {calories}') # Print list for test
-        print(f'Workouts list = {workouts}') # Print list for test
+#        print(f'Calories list = {calories}') # Print list for test
+#        print(f'Workouts list = {workouts}') # Print list for test
 
 
 if __name__ == "__main__":
