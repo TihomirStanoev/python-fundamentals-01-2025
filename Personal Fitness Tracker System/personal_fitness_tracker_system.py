@@ -9,9 +9,12 @@ workouts = []  # To store workout types and durations
 calories = []  # To store calorie intake for meals
 
 # Variables for daily goals
-workout_goal = 0  # Daily workout goal in minutes
+workout_goal = 0 # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
+# Variables for total values
+duration_total = 0
+calories_total = 0
 
 def calculations(data_list, parameter):  # First argument list, second str 'workout'/'meal'
     """
@@ -56,21 +59,27 @@ def calculations(data_list, parameter):  # First argument list, second str 'work
 
     return table, count, total, best_list
 
-def save_data(list_data, parameter):
+def save_data(list_data, parameter, total):
     """
     Save data in main lists.
     """
+    global duration_total
+    global calories_total
+
     save = input(f"Do you want to save this {parameter}?\n"
                          f"1. ✅ 2. ❌\nEnter your choice: ")
 
     if save == '1' and parameter == 'meal':
         calories.extend(list_data)
+        calories_total += total
 
     elif save == '1' and parameter == 'workout':
         workouts.extend(list_data)
+        duration_total += total
 
     else:
         return print(f'The {parameter} is not saved!')
+
 
     return print(f'\n💾  The {parameter} is saved successfully!' + '\n' * 3)
 
@@ -92,12 +101,42 @@ def limitations():
     return limit
 
 
+def menu_statistic(total, goal):
+    """
+    Draws the bars at the start of the program
+    """
+    bar_length = 14 # Set length of bar
+    fill_symbol, empty_symbol = '#', ' ' # Symbol for fill and empty space
+    percentage = total / goal # Percentage from target
+    bar_fill = int(percentage * bar_length) # Value for bar filled
+
+    bar = ''
+
+    if percentage >= 1: # If goal is over 100%
+        bar += f' Goal achieved: {percentage * 100:.2f}% '
+
+    elif percentage <= 0:
+        bar += 'error'
+    else:
+        bar += '|'
+        for fill in range(1, bar_length):
+            if bar_fill >= fill:
+                bar += f'{fill_symbol}'
+            else:
+                bar += f'{empty_symbol}'
+        bar += f'| {percentage * 100 :.2f}%'
+
+    return bar
+
+
+
 def log_workout():
     """
     Log a workout.
     - Append the workout type and duration to the workouts list.
     - Print a confirmation message.
     """
+
     type_of_workout = ''
     duration = 0
     workout_list = []
@@ -146,7 +185,7 @@ def log_workout():
 
     print(f"Do you want to save a {type_of_workout} with {duration} min?\n")
 
-    save_data(workout_list, 'workout')
+    save_data(workout_list, 'workout', duration)
 
 
 def log_calorie_intake():  # !Input list
@@ -198,7 +237,7 @@ def log_calorie_intake():  # !Input list
     print(f'Do you want to save {meals_count} meals with total {calorie_total} calories:\n')
     print(f'{meals_table}')
 
-    save_data(total_meals ,calculation_type)
+    save_data(total_meals ,calculation_type, calorie_total)
 
 
 
@@ -293,7 +332,7 @@ def set_daily_goals():
     global workout_goal
     global calorie_goal
 
-    print('\tSet Daily Goals 💪🔥\n')
+    print('\tSet Daily Goals 💪🔥')
 
     print('Take control of your fitness journey by '
           'setting clear daily targets\n')
@@ -335,8 +374,13 @@ def main():
     print("Welcome to the Personal Fitness Tracker System 🏋️‍♂️\n")
 
     while True:
-        # Print workouts list to check for working
-        print(calorie_goal)
+        # Print workout progress bar
+        if duration_total != 0 and workout_goal != 0:
+            print(f'Workout progress {menu_statistic(duration_total, workout_goal)}')
+        if calories_total != 0 and calorie_goal != 0:
+            print(f'Calorie progress {menu_statistic(calories_total, calorie_goal)}')
+
+
         # Display menu options
         print("1. Log Workout")
         print("2. Log Calorie Intake")
@@ -344,6 +388,8 @@ def main():
         print("4. Reset Progress")
         print("5. Set Daily Goals")
         print("6. Exit")
+
+
 
         # Prompt user for their choice
         choice = input("\nEnter your choice: ")
@@ -378,8 +424,7 @@ def main():
         else:
             print("Invalid choice, please try again.")
 
-#        print(f'Calories list = {calories}') # Print list for test
-#        print(f'Workouts list = {workouts}') # Print list for test
+
 
 
 if __name__ == "__main__":
