@@ -12,7 +12,7 @@ calories = []  # To store calorie intake for meals
 workout_goal = 0 # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
-# Variables for total values
+# Variables for sum of total values
 duration_total = 0
 calories_total = 0
 
