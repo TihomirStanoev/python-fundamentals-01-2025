@@ -3,7 +3,9 @@ from get_calorie import nutri_list
 
 # Personal Fitness Tracker System 🏋️‍♂️
 
+
 MAX_DURATION = 400.0
+workout_menu = [['🏃','run'],['🚲','cycling'],['💪', 'fitness'],['🚶‍','walk']]
 # Lists to store fitness data
 workouts = []  # To store workout types and durations
 calories = []  # To store calorie intake for meals
@@ -63,8 +65,7 @@ def save_data(list_data, parameter, total):
     """
     Save data in main lists.
     """
-    global duration_total
-    global calories_total
+    global duration_total, calories_total
 
     save = input(f"Do you want to save this {parameter}?\n"
                          f"1. ✅ 2. ❌\nEnter your choice: ")
@@ -82,6 +83,7 @@ def save_data(list_data, parameter, total):
 
 
     return print(f'\n💾  The {parameter} is saved successfully!' + '\n' * 3)
+
 
 
 def limitations():
@@ -142,25 +144,36 @@ def log_workout():
     workout_list = []
 
     while True:
-        workout_choose = input(
-            'Choose a workout from the menu, you can save your own workout by choosing "Other":\n\n'
-            '\t1. 🏃‍♂️ Running\n'
-            '\t2. 🚲 Cycling\n'
-            '\t3. 🚶‍♂️ Walking\n'
-            '\t4. 💪 Fitness\n'
-            '\t5. Other\n'
-            '\t6. Back\n\n'
-            'You\'r choice: ')
+        print('Choose a workout from the menu.\n')
 
-        if workout_choose == '1':
-            type_of_workout = 'Running'
-        elif workout_choose == '2':
-            type_of_workout = 'Cycling'
-        elif workout_choose == '3':
-            type_of_workout = 'Walking'
-        elif workout_choose == '4':
-            type_of_workout = 'Fitness'
-        elif workout_choose == '5':
+        for index,element in enumerate(workout_menu):
+            icon, workout = element
+            print(f'{index + 1}. {icon} {workout.title()}')
+
+
+        workout_choose = int(input(
+            f'\nChoose a workout from the menu, you can save your own workout by choosing "Other":\n\n'
+            f''))
+        print(type(workout_choose))
+        print(workout_menu[workout_choose-1][1])
+        #     '\t1. 🏃‍♂️ Run\n'
+        #     '\t2. 🚲 Cycling\n'
+        #     '\t3. 🚶‍♂️ Walk\n'
+        #     '\t4. 💪 Fitness\n'
+        #     '\t5. Other\n'
+        #     '\t6. Back\n\n'
+        #     'You\'r choice: '
+        #
+        # if workout_choose == '1':
+        #     type_of_workout = 'Running'
+        # elif workout_choose == '2':
+        #     type_of_workout = 'Cycling'
+        # elif workout_choose == '3':
+        #     type_of_workout = 'Walking'
+        # elif workout_choose == '4':
+        #    type_of_workout = 'Fitness'
+
+        if workout_choose == '5':
             type_of_workout = input('Training type: ')
         elif workout_choose == '6':
             return print("Back to main menu.")
@@ -183,7 +196,7 @@ def log_workout():
     workout_list.append(type_of_workout)
     workout_list.append(duration)
 
-    print(f"Do you want to save a {type_of_workout} with {duration} min?\n")
+    print(f"Current workout: {type_of_workout} with {duration} min.\n")
 
     save_data(workout_list, 'workout', duration)
 
@@ -281,10 +294,13 @@ def view_progress():
         calculation_type = 'meal'  # Set calculations for calories
         meal_table, meals_count, total_calories, most_calorie = calculations(calories, calculation_type)
 
-        print(meal_table)  #test
-        print(f'Total meals: {meals_count}')  #test
-        print(f'Total cals: {total_calories}')  #test
-        print(f'Top meal: {most_calorie[0]} - {most_calorie[1]} cal\n')  #test
+        # Printing summary info for meals
+        print("You're doing great so far!")
+        print(f"▫️You have recorded {meals_count} meals.\n")
+        print(f"▫️Your total calorie intake is {total_calories}.\n")
+        print(f"▫️The meal with the highest calorie count is '{most_calorie}'.\n\n")
+        print(f"Here is the current meal table:\n{meal_table}\n")
+        print("Keep up the good work and stay mindful of your eating habits!")
         input("Press ENTER to continue..")
 
 
