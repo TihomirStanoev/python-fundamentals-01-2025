@@ -61,6 +61,31 @@ def calculations(data_list, parameter):  # First argument list, second str 'work
 
     return table, count, total, best_list
 
+def add_workout():
+    """
+    Add custom workout.
+    """
+    icon,workout = '', '' # Variables for icon and name of workout
+    new_workouts = [] # This list will append to workout_menu with elements icon and workout
+    message = ''
+
+    print('Add custom workout.')
+    icon = input('First select an icon: ') # Choose icon
+    workout = input('Now type a name for the workout: ') # Choose workout name
+    confirm = input(f'Are you sure you want to add {workout}?\n Type \'1\' for YES: ')
+
+    new_workouts = [icon, workout]
+
+    if confirm == '1':
+        workout_menu.append(new_workouts)
+        message = 'The workout has been added!'
+    else:
+        message = 'The workout has not been added!'
+
+    return print(message)
+
+
+
 def save_data(list_data, parameter, total):
     """
     Save data in main lists.
@@ -144,39 +169,26 @@ def log_workout():
     workout_list = []
 
     while True:
+        menu_length = len(workout_menu)
         print('Choose a workout from the menu.\n')
 
-        for index,element in enumerate(workout_menu):
+        for index,element in enumerate(workout_menu): # Print workout_menu
             icon, workout = element
             print(f'{index + 1}. {icon} {workout.title()}')
 
+        print(f'{menu_length + 1}. Make custom. ')
+        print(f'{menu_length + 2}. Back to main menu.')
 
-        workout_choose = int(input(
-            f'\nChoose a workout from the menu, you can save your own workout by choosing "Other":\n\n'
-            f''))
-        print(type(workout_choose))
-        print(workout_menu[workout_choose-1][1])
-        #     '\t1. 🏃‍♂️ Run\n'
-        #     '\t2. 🚲 Cycling\n'
-        #     '\t3. 🚶‍♂️ Walk\n'
-        #     '\t4. 💪 Fitness\n'
-        #     '\t5. Other\n'
-        #     '\t6. Back\n\n'
-        #     'You\'r choice: '
-        #
-        # if workout_choose == '1':
-        #     type_of_workout = 'Running'
-        # elif workout_choose == '2':
-        #     type_of_workout = 'Cycling'
-        # elif workout_choose == '3':
-        #     type_of_workout = 'Walking'
-        # elif workout_choose == '4':
-        #    type_of_workout = 'Fitness'
 
-        if workout_choose == '5':
-            type_of_workout = input('Training type: ')
-        elif workout_choose == '6':
-            return print("Back to main menu.")
+        workout_choose = int(input(f'\nChoose a workout from the menu, you can save your own workout by choosing "Other": '))
+
+        if 0 < workout_choose <= menu_length:
+            type_of_workout = workout_menu[workout_choose-1][1]
+        elif workout_choose == menu_length + 1:
+            add_workout()
+            continue
+        elif workout_choose == menu_length + 2:
+            return print('Back to main menu.')
         else:
             print('⭕ Invalid choice!')
             continue
