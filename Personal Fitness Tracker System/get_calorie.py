@@ -11,14 +11,14 @@ def nutri_list(query):
             meal = calorie_json["items"][0]["name"]
             calorie = calorie_json["items"][0]["calories"]
         except IndexError:
-            return 'error'
+            return ['error']
         meal_list.append(meal)
         meal_list.append(calorie)
         return meal_list
 
 
     else:
-        return "error"
+        return ['error']
     #    print("Error:", response.status_code, response.text)
 
 

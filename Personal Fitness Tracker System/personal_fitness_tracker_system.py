@@ -7,7 +7,7 @@ from get_calorie import nutri_list
 MAX_DURATION = 400.0
 workout_menu = [['🏃','run'],['🚲','cycling'],['💪', 'fitness'],['🚶‍','walk']]
 # Lists to store fitness data
-workouts = [['fitness', 3405.0],['running', 345.0],['swimming', 345.0],['walk', 34.0],['fitndess', 2.0]]  # To store workout types and durations
+workouts = []  # To store workout types and durations
 calories = []  # To store calorie intake for meals
 
 # Variables for daily goals
@@ -260,7 +260,7 @@ def log_calorie_intake():  # !Input list
 
         meal_list = nutri_list(meal_input)  # Get calories
 
-        if meal_list == 'error':
+        if 'error' in meal_list:
             print("Wrong input, try again with correct meal: ", end='')
             continue
 
@@ -432,7 +432,7 @@ def main():
 
     while True:
         # Print workout progress bar
-        print(workouts)
+
         if duration_total != 0 and workout_goal != 0:
             print(f'Workout progress {menu_statistic(duration_total, workout_goal)}')
         if calories_total != 0 and calorie_goal != 0:
