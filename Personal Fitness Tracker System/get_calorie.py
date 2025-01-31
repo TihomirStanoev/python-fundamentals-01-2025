@@ -22,3 +22,6 @@ def nutri_list(query):
     #    print("Error:", response.status_code, response.text)
 
 
+
+
+

@@ -7,7 +7,7 @@ from get_calorie import nutri_list
 MAX_DURATION = 400.0
 workout_menu = [['🏃','run'],['🚲','cycling'],['💪', 'fitness'],['🚶‍','walk']]
 # Lists to store fitness data
-workouts = []  # To store workout types and durations
+workouts = [['fitness', 3405.0],['running', 345.0],['swimming', 345.0],['walk', 34.0],['fitndess', 2.0]]  # To store workout types and durations
 calories = []  # To store calorie intake for meals
 
 # Variables for daily goals
@@ -18,48 +18,72 @@ calorie_goal = 0  # Daily calorie intake goal
 duration_total = 0
 calories_total = 0
 
-def calculations(data_list, parameter):  # First argument list, second str 'workout'/'meal'
+
+def counting(data_list):
     """
-    Calculations.
-    - Calculate all data needed for progres.
+    Count total number of workouts or meals
     """
-    # Default table
-    table = ' ===   === \n'
-    unit = ' '
-    # Check header of table
+    total_items = len(data_list)
+
+    return  total_items
+
+
+def total(data_list):
+    """
+    Sum of minutes/calories
+    """
+    total_sum = 0
+
+    for values in data_list:
+        total_sum += values[1]
+
+    return total_sum
+
+
+def the_highest(data_list) -> list:
+    """
+    Find list with the highest values
+    """
+    max_value = 0
+    highest_list = []
+
+
+    for action, value in data_list:
+        if value > max_value:
+            highest_list.append(action)
+            highest_list.append(value)
+            max_value = value
+
+    return highest_list
+
+
+def table_creation(data_list, parameter):
+    """
+    Create table
+    """
+    table = '.---.-----------.---------.----.\n' # Create first lines of the table
+    unit = 'n/a'
+    index = 1
+
+    # Create icons and first rows
     if parameter == 'workout':
-        table = '🏋️ Workout  ⏱️ \n'  # Table header if parameter is 'workout'
-        unit = ' min'
+        table += ('|🏋️ |  Workout  |  Time  | ⏱️ |\n'
+                  ':---:------------:--------:----:\n')
+        unit = 'min'
     elif parameter == 'meal':
-        table = '🥓️ Meal    ⚡⚡⚡\n'  # Table header if parameter is 'meal'
-        unit = ' cal'
+        table += ('|🥓️ |   Meals   |  Cal   | ⚡️ |\n'
+                  ':---:------------:--------:----:\n')
+        unit = 'cal'
 
-    count = 0  # Count str values
-    total = 0  # Sum of numeric values
-    best_list = []  # List with two items
-    best, best_index = 0, 0  # 'best' is the highest value in list, best_index is his index or index-1 is TEXT of highest value
+    # Create  body of the table
+    for action, value in data_list:
+        table += f'| {index} | {action.title():<10s} | {str(value)[:6]:>6s} |{unit} |\n'
+        index +=1
 
-    #Loop for separate workouts/meals and duration/calories
-    for index in range(len(data_list)):
+    table += '\'---\'-----------\'--------\'-----\'\n'
 
-        # Meal or Workout [text]
-        if index % 2 == 0:
-            count += 1
-            table += f'  {data_list[index]} - '
-        else:
+    return table
 
-            # Calories or Minutes [numeric]
-            total += data_list[index]
-            table += f'{data_list[index]}{unit} \n'
-            if data_list[index] > best:
-                best = data_list[index]
-                best_index = index
-
-    # Extract the highest workout/meal and append in best_list
-    best_list.append(data_list[best_index - 1])
-    best_list.append(data_list[best_index])
-
-    return table, count, total, best_list
 
 def add_workout():
     """
@@ -82,7 +106,9 @@ def add_workout():
     else:
         message = 'The workout has not been added!'
 
-    return print(message)
+    print(message)
+
+    return message
 
 
 
@@ -100,7 +126,7 @@ def save_data(list_data, parameter, total):
         calories_total += total
 
     elif save == '1' and parameter == 'workout':
-        workouts.extend(list_data)
+        workouts.append(list_data)
         duration_total += total
 
     else:
@@ -185,7 +211,7 @@ def log_workout():
         if 0 < workout_choose <= menu_length:
             type_of_workout = workout_menu[workout_choose-1][1]
         elif workout_choose == menu_length + 1:
-            add_workout()
+            print(add_workout())
             continue
         elif workout_choose == menu_length + 2:
             return print('Back to main menu.')
@@ -224,6 +250,7 @@ def log_calorie_intake():  # !Input list
           "the program will calculate the calories itself. [Input \'e\' for exit..]\n Enter a meal: ", end='')
 
     total_meals = []  # List with meals for save
+    calculation_type = 'meal'  # Type for calculation, only used for UoM and table header
 
     while True:
         meal_input = input().lower()
@@ -237,27 +264,19 @@ def log_calorie_intake():  # !Input list
             print("Wrong input, try again with correct meal: ", end='')
             continue
 
-        for index in range(len(meal_list)):  # Print and append elements from temp list
-            if index % 2 == 0:
-                meal_name = meal_list[index].title()
-                print(f'{meal_name} is', end=' ')
-                total_meals.append(meal_name)
-            else:
-                cals = round(meal_list[index], 1)
-                print(f'{cals} calories, add other meals or input \'s\' for save: ', end='')
-                total_meals.append(cals)
+        print(f'{meal_list[0]} is {meal_list[1]} calories, add other meals or input \'s\' for save: ', end='')
+        total_meals.append(meal_list)
 
     print('\n\n')
 
     if not total_meals or meal_input == 'e':  # Continue if total_meals no elements or first input == 's'
-        return print("Aborted!!!")
+        print("Aborted!!!")
+        return ''
 
-    calculation_type = 'meal'  # Type for calculation, only used for UoM and table header
+    meals_table = table_creation(total_meals, calculation_type)  # Table
+    meals_count = counting(total_meals) # Count of meals
+    calorie_total = total(total_meals)  # Sum of calories
 
-    meals = calculations(total_meals, calculation_type)
-    meals_table = meals[0]  # Table
-    meals_count = meals[1]  # Count of meals
-    calorie_total = meals[2]  # Sum of calories
 
     print(f'Do you want to save {meals_count} meals with total {calorie_total} calories:\n')
     print(f'{meals_table}')
@@ -284,12 +303,17 @@ def view_progress():
 
 
     if choose == '1' or choose == '3':
+
         # Check for recorded workout.
         if not workouts:
             return print('You don\'t have any workouts recorded yet')
 
         calculation_type = 'workout'  # Set calculations for workouts
-        workout_table, workouts_count, total_duration, longest_workout = calculations(workouts, calculation_type)
+        workout_table = table_creation(workouts, calculation_type)
+        workouts_count = counting(workouts)
+        total_duration = total(workouts)
+        longest_workout = the_highest(workouts)
+
 
         # Printing summary info for workouts
         print('📊 Let\'s see a summary view of all you\'r workouts.\n')
@@ -304,7 +328,12 @@ def view_progress():
             return print('You don\'t have any meals recorded yet')
 
         calculation_type = 'meal'  # Set calculations for calories
-        meal_table, meals_count, total_calories, most_calorie = calculations(calories, calculation_type)
+
+        meal_table = table_creation(calories, calculation_type)
+        meals_count = counting(calories)
+        total_calories = total(calories)
+        most_calorie = the_highest(calories)
+
 
         # Printing summary info for meals
         print("You're doing great so far!")
@@ -403,6 +432,7 @@ def main():
 
     while True:
         # Print workout progress bar
+        print(workouts)
         if duration_total != 0 and workout_goal != 0:
             print(f'Workout progress {menu_statistic(duration_total, workout_goal)}')
         if calories_total != 0 and calorie_goal != 0:
