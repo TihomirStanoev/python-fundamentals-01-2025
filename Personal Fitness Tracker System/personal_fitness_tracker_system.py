@@ -335,12 +335,12 @@ def reset_progress():
     confirm = input('Type \'reset\' for confirmation or press \'enter\' for continue:')
 
     if confirm == 'reset':
-        if reset == '1':
+        if reset == '2':
             calories.clear()  # Clear calories list
             calories_total = 0
             return print("Calories progress is restarted!!!")
 
-        elif reset == '2':
+        elif reset == '1':
             workouts.clear()  # Clear workout list
             duration_total = 0
             return print("Workout progress is restarted!!!")
@@ -436,9 +436,12 @@ def main():
     """
     Main function to interact with the user.
     """
-    print("Welcome to the Personal Fitness Tracker System 🏋️‍♂️\n")
+
 
     while True:
+        print('\n'*20) # Clear console
+        print("Welcome to the Personal Fitness Tracker System 🏋️‍♂️\n")
+
         # Print workout progress bar
 
         if duration_total != 0 and workout_goal != 0:
@@ -488,8 +491,8 @@ def main():
             print('After a reset, your progress will be lost.\n')
 
             # Display menu options
-            print('1. 🍴 Reset meals progress.')
-            print('2. 💪 Reset workout progress.')
+            print('1. 💪 Reset workout progress.')
+            print('2. 🍴 Reset meals progress.')
             print('3. Reset all.')
             print('Other for exit.')
             reset_progress()
