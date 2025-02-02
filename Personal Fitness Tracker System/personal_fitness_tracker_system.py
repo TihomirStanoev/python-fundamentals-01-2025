@@ -1,17 +1,19 @@
 from get_calorie import nutri_list
 
-
 # Personal Fitness Tracker System 🏋️‍♂️
 
 
-MAX_DURATION = 400.0
-workout_menu = [['🏃','run'],['🚲','cycling'],['💪', 'fitness'],['🚶‍','walk']]
+MAX_DURATION = 400.0 # Workouts maximum duration limit.
+workout_menu = [['🏃', 'run'], ['🚲', 'cycling'], ['💪', 'fitness'], ['🚶‍', 'walk']] # Default meu
+workout_type = 'workout'
+calories_type = 'meal'
+
 # Lists to store fitness data
 workouts = []  # To store workout types and durations
 calories = []  # To store calorie intake for meals
 
 # Variables for daily goals
-workout_goal = 0 # Daily workout goal in minutes
+workout_goal = 0  # Daily workout goal in minutes
 calorie_goal = 0  # Daily calorie intake goal
 
 # Variables for sum of total values
@@ -25,12 +27,12 @@ def counting(data_list):
     """
     total_items = len(data_list)
 
-    return  total_items
+    return total_items
 
 
 def total(data_list):
     """
-    Sum of minutes/calories
+    Sum of total minutes/calories
     """
     total_sum = 0
 
@@ -47,7 +49,6 @@ def the_highest(data_list) -> list:
     max_value = 0
     highest_list = []
 
-
     for action, value in data_list:
         if value > max_value:
             highest_list.append(action)
@@ -61,16 +62,16 @@ def table_creation(data_list, parameter):
     """
     Create table
     """
-    table = '.---.-----------.---------.----.\n' # Create first lines of the table
+    table = '.---.-----------.---------.----.\n'  # Create first lines of the table
     unit = 'n/a'
     index = 1
 
     # Create icons and first rows
-    if parameter == 'workout':
+    if parameter == workout_type:
         table += ('|🏋️ |  Workout  |  Time  | ⏱️ |\n'
                   ':---:------------:--------:----:\n')
         unit = 'min'
-    elif parameter == 'meal':
+    elif parameter == calories_type:
         table += ('|🥓️ |   Meals   |  Cal   | ⚡️ |\n'
                   ':---:------------:--------:----:\n')
         unit = 'cal'
@@ -78,7 +79,7 @@ def table_creation(data_list, parameter):
     # Create  body of the table
     for action, value in data_list:
         table += f'| {index} | {action.title():<10s} | {str(value)[:6]:>6s} |{unit} |\n'
-        index +=1
+        index += 1
 
     table += '\'---\'-----------\'--------\'-----\'\n'
 
@@ -89,13 +90,13 @@ def add_workout():
     """
     Add custom workout.
     """
-    icon,workout = '', '' # Variables for icon and name of workout
-    new_workouts = [] # This list will append to workout_menu with elements icon and workout
+    icon, workout = '', ''  # Variables for icon and name of workout
+    new_workouts = []  # This list will append to workout_menu with elements icon and workout
     message = ''
 
     print('Add custom workout.')
-    icon = input('First select an icon: ') # Choose icon
-    workout = input('Now type a name for the workout: ') # Choose workout name
+    icon = input('First select an icon: ')  # Choose icon
+    workout = input('Now type a name for the workout: ')  # Choose workout name
     confirm = input(f'Are you sure you want to add {workout}?\n Type \'1\' for YES: ')
 
     new_workouts = [icon, workout]
@@ -111,7 +112,6 @@ def add_workout():
     return message
 
 
-
 def save_data(list_data, parameter, total):
     """
     Save data in main lists.
@@ -119,7 +119,7 @@ def save_data(list_data, parameter, total):
     global duration_total, calories_total
 
     save = input(f"Do you want to save this {parameter}?\n"
-                         f"1. ✅ 2. ❌\nEnter your choice: ")
+                 f"1. ✅ 2. ❌\nEnter your choice: ")
 
     if save == '1' and parameter == 'meal':
         calories.extend(list_data)
@@ -130,23 +130,21 @@ def save_data(list_data, parameter, total):
         duration_total += total
 
     else:
-        return print(f'The {parameter} is not saved!')
+        return f'The {parameter} is not saved!'
 
-
-    return print(f'\n💾  The {parameter} is saved successfully!' + '\n' * 3)
-
+    return f'\n💾  The {parameter} is saved successfully!' + '\n' * 3
 
 
 def limitations():
     """
     Returns a message if the targets are out of limits
     """
-    limit =  '''
-    “Goal Out of Limits 🚫
+    limit = '''
+    “🚫 Goal Out of Limits!
     Oops! Your goal is outside the allowed range:
     
-        Workout Goal: Must be between 0 and 1000 minutes.
-        Calorie Goal: Must be between 1200 and 5000 calories.
+        Workout Goal: Must be between 0 and ∞ minutes.
+        Calorie Goal: Must be between 0 and ∞ calories.
     
     Please adjust your goal to fit within the limits and try again. Let’s stay on track!”
     '''
@@ -158,14 +156,14 @@ def menu_statistic(total, goal):
     """
     Draws the bars at the start of the program
     """
-    bar_length = 14 # Set length of bar
-    fill_symbol, empty_symbol = '#', ' ' # Symbol for fill and empty space
-    percentage = total / goal # Percentage from target
-    bar_fill = int(percentage * bar_length) # Value for bar filled
+    bar_length = 14  # Set length of bar
+    fill_symbol, empty_symbol = '#', ' '  # Symbol for fill and empty space
+    percentage = total / goal  # Percentage from target
+    bar_fill = int(percentage * bar_length)  # Value for bar filled
 
     bar = ''
 
-    if percentage >= 1: # If goal is over 100%
+    if percentage >= 1:  # If goal is over 100%
         bar += f' Goal achieved: {percentage * 100:.2f}% '
 
     elif percentage <= 0:
@@ -180,7 +178,6 @@ def menu_statistic(total, goal):
         bar += f'| {percentage * 100 :.2f}%'
 
     return bar
-
 
 
 def log_workout():
@@ -198,18 +195,18 @@ def log_workout():
         menu_length = len(workout_menu)
         print('Choose a workout from the menu.\n')
 
-        for index,element in enumerate(workout_menu): # Print workout_menu
+        for index, element in enumerate(workout_menu):  # Print workout_menu
             icon, workout = element
             print(f'{index + 1}. {icon} {workout.title()}')
 
         print(f'{menu_length + 1}. Make custom. ')
         print(f'{menu_length + 2}. Back to main menu.')
 
-
-        workout_choose = int(input(f'\nChoose a workout from the menu, you can save your own workout by choosing "Other": '))
+        workout_choose = int(
+            input(f'\nChoose a workout from the menu, you can save your own workout by choosing "Other": '))
 
         if 0 < workout_choose <= menu_length:
-            type_of_workout = workout_menu[workout_choose-1][1]
+            type_of_workout = workout_menu[workout_choose - 1][1]
         elif workout_choose == menu_length + 1:
             print(add_workout())
             continue
@@ -223,7 +220,7 @@ def log_workout():
     while True:
         duration_choose = float(input('⏳ Workout Duration [min]: '))
         if 0 < duration_choose < MAX_DURATION:
-            duration = round(duration_choose,2)
+            duration = round(duration_choose, 2)
             break
         else:
             print(
@@ -236,7 +233,7 @@ def log_workout():
 
     print(f"Current workout: {type_of_workout} with {duration} min.\n")
 
-    save_data(workout_list, 'workout', duration)
+    print(save_data(workout_list, 'workout', duration))
 
 
 def log_calorie_intake():  # !Input list
@@ -250,7 +247,6 @@ def log_calorie_intake():  # !Input list
           "the program will calculate the calories itself. [Input \'e\' for exit..]\n Enter a meal: ", end='')
 
     total_meals = []  # List with meals for save
-    calculation_type = 'meal'  # Type for calculation, only used for UoM and table header
 
     while True:
         meal_input = input().lower()
@@ -273,19 +269,17 @@ def log_calorie_intake():  # !Input list
         print("Aborted!!!")
         return ''
 
-    meals_table = table_creation(total_meals, calculation_type)  # Table
-    meals_count = counting(total_meals) # Count of meals
+    meals_table = table_creation(total_meals, calories_type)  # Table
+    meals_count = counting(total_meals)  # Count of meals
     calorie_total = total(total_meals)  # Sum of calories
-
 
     print(f'Do you want to save {meals_count} meals with total {calorie_total} calories:\n')
     print(f'{meals_table}')
 
-    save_data(total_meals ,calculation_type, calorie_total)
+    print(save_data(total_meals, calories_type, calorie_total))
 
 
-
-def view_progress():
+def view_progress(menu_item):
     """
     Display a summary of the user's progress for the day.
     - Calculate the total workout time and total calories.
@@ -293,27 +287,16 @@ def view_progress():
     """
     # Calories, Workout, Summary
 
-    # Print menu
-    print("🚀 Check your progress so far by selecting an option from the menu.\n")
-    print('\t1. 💪 Workouts')
-    print('\t2. 🍴 Meals')
-    print('\t3. Summary')
-    print('\t4. Back')
-    choose = input("\nEnter your choice: ")
-
-
-    if choose == '1' or choose == '3':
+    if menu_item == '1' or menu_item == '3':
 
         # Check for recorded workout.
         if not workouts:
             return print('You don\'t have any workouts recorded yet')
 
-        calculation_type = 'workout'  # Set calculations for workouts
-        workout_table = table_creation(workouts, calculation_type)
+        workout_table = table_creation(workouts, workout_type)
         workouts_count = counting(workouts)
         total_duration = total(workouts)
         longest_workout = the_highest(workouts)
-
 
         # Printing summary info for workouts
         print('📊 Let\'s see a summary view of all you\'r workouts.\n')
@@ -323,25 +306,22 @@ def view_progress():
         print(f'▫️Yo\'re best workout is {longest_workout[0].lower()} with {longest_workout[1]} min duration!\n')
         input("Press ENTER to continue..")
 
-    if choose == '2' or choose == '3':
+    if menu_item == '2' or menu_item == '3':
         if not calories:
             return print('You don\'t have any meals recorded yet')
 
-        calculation_type = 'meal'  # Set calculations for calories
-
-        meal_table = table_creation(calories, calculation_type)
+        meal_table = table_creation(calories, calories_type)
         meals_count = counting(calories)
         total_calories = total(calories)
         most_calorie = the_highest(calories)
 
-
         # Printing summary info for meals
-        print("You're doing great so far!")
-        print(f"▫️You have recorded {meals_count} meals.\n")
-        print(f"▫️Your total calorie intake is {total_calories}.\n")
-        print(f"▫️The meal with the highest calorie count is '{most_calorie}'.\n\n")
-        print(f"Here is the current meal table:\n{meal_table}\n")
-        print("Keep up the good work and stay mindful of your eating habits!")
+        print("🍏You're doing great so far!\n")
+        print(f"▫️You have recorded {meals_count} meals.")
+        print(f"▫️Your total calorie intake is {total_calories}.")
+        print(f"▫️The meal with the highest calorie count is a '{most_calorie[0]}' with {most_calorie[1]} calories.\n\n")
+        print(f"Here is the current meal table:\n{meal_table}")
+        print("Keep up the good work and stay mindful of your eating habits!\n")
         input("Press ENTER to continue..")
 
 
@@ -350,30 +330,21 @@ def reset_progress():
     Clear all data from the workouts and calories lists.
     - Print a confirmation message.
     """
-    print('❌❌❌ Reset Progress ❌❌❌\n')
-    print('After a reset, your progress will be lost.\n')
-
-    # Display menu options
-    print('1. 🍴 Reset meals progress.')
-    print('2. 💪 Reset workout progress.')
-    print('3. Reset all.')
-    print('Other for exit.')
 
     reset = input("\nEnter your choice: ")
-
     confirm = input('Type \'reset\' for confirmation or press \'enter\' for continue:')
 
     if confirm == 'reset':
         if reset == '1':
-            calories.clear() # Clear calories list
+            calories.clear()  # Clear calories list
             return print("Calories progress is restarted!!!")
 
         elif reset == '2':
-            workouts.clear() # Clear workout list
+            workouts.clear()  # Clear workout list
             return print("Workout progress is restarted!!!")
 
         elif reset == '3':
-            workouts.clear() # Clear all lists
+            workouts.clear()  # Clear all lists
             calories.clear()
             return print("All progress is restarted!!!")
 
@@ -389,10 +360,6 @@ def set_daily_goals():
     global workout_goal
     global calorie_goal
 
-    print('\tSet Daily Goals 💪🔥')
-
-    print('Take control of your fitness journey by '
-          'setting clear daily targets\n')
     while True:
         print('1. Set Workout Goal! 🏋️')
         workout_goal = float(input('\tHow much time will you dedicate to breaking a sweat today (0 - ∞ min): '))
@@ -406,22 +373,61 @@ def set_daily_goals():
     while True:
         print('2. Set Calorie Goal!')
         calorie_goal = float(input('\tPlan your calorie intake or burn to stay on track.: '))
-        if calorie_goal <= 0 or calorie_goal >= 5000:
+        if calorie_goal <= 0:
             print(limitations())
             continue
         else:
-            print(f"Calories Goal is set to {calorie_goal} cal")
+            print(f"Calories Goal is set to {calorie_goal} cal\n")
             break
 
 
-
-def encouragement_system():
+def encouragement_system(fitness_data):
     """
     Provide motivational feedback based on progress and goals.
     - Compare current totals to the daily goals.
     - Print encouragement messages.
     """
-    pass
+    def encouragement_workout():
+        workout_encouragement_messages = ''
+        progress = duration_total / workout_goal
+
+        if progress == 0:
+            workout_encouragement_messages = ''
+        elif progress <= 0.5:
+            workout_encouragement_messages = 'You\'re off to a great start! Keep pushing, every minute counts! 💪🔥'
+        elif progress <= 0.85:
+            workout_encouragement_messages = 'Almost there! Just a little more effort to hit your daily workout goal! ⏳🏃‍♂️'
+        elif progress == 1:
+            workout_encouragement_messages = 'Awesome job! You crushed your workout goal today! 🎯🏆'
+        else:
+            workout_encouragement_messages = 'Superb dedication! You’ve gone above and beyond—keep up the fantastic work! 🚀🎉'
+
+        return workout_encouragement_messages
+
+
+    def encouragement_calories():
+        calories_encouragement_messages = ''
+        progress = calories_total / calorie_goal
+
+        if progress == 0:
+            calories_encouragement_messages = ''
+        elif progress <= 0.7:
+            calories_encouragement_messages = 'Don\'t forget to fuel your body properly! A balanced diet keeps you strong! 🥗💪'
+        elif progress <= 1:
+            calories_encouragement_messages = 'Great job maintaining a healthy balance! Keep up the good work! ✅🍽️'
+        elif progress <= 1.2:
+            calories_encouragement_messages = 'It\'s okay to indulge sometimes! Stay mindful and adjust tomorrow! 🍫😉'
+        else:
+            calories_encouragement_messages = 'Watch out! Overeating can slow progress. Let’s make a healthier choice next meal! ⚠️🥦'
+
+        return calories_encouragement_messages
+
+    if fitness_data == workout_type:
+        return encouragement_workout()
+
+    if fitness_data == calories_type:
+        return encouragement_calories()
+
 
 
 def main():
@@ -435,9 +441,10 @@ def main():
 
         if duration_total != 0 and workout_goal != 0:
             print(f'Workout progress {menu_statistic(duration_total, workout_goal)}')
+            print(f'{encouragement_system(workout_type)}\n')
         if calories_total != 0 and calorie_goal != 0:
             print(f'Calorie progress {menu_statistic(calories_total, calorie_goal)}')
-
+            print(f'{encouragement_system(calories_type)}\n')
 
         # Display menu options
         print("1. Log Workout")
@@ -446,8 +453,6 @@ def main():
         print("4. Reset Progress")
         print("5. Set Daily Goals")
         print("6. Exit")
-
-
 
         # Prompt user for their choice
         choice = input("\nEnter your choice: ")
@@ -465,24 +470,42 @@ def main():
 
         elif choice == '3':
             # Call view_progress function
-            view_progress()
+            # Print menu
+            print("🚀 Check your progress so far by selecting an option from the menu.\n")
+            print('\t1. 💪 Workouts')
+            print('\t2. 🍴 Meals')
+            print('\t3. Summary')
+            print('\t4. Back')
+            choose = input("\nEnter your choice: ")
+
+            view_progress(choose)
 
         elif choice == '4':
             # Call reset_progress function
+            print('❌❌❌ Reset Progress ❌❌❌\n')
+            print('After a reset, your progress will be lost.\n')
+
+            # Display menu options
+            print('1. 🍴 Reset meals progress.')
+            print('2. 💪 Reset workout progress.')
+            print('3. Reset all.')
+            print('Other for exit.')
             reset_progress()
 
         elif choice == '5':
             # Prompt for daily goals
+            print('\tSet Daily Goals 💪🔥')
+
+            print('Take control of your fitness journey by '
+                  'setting clear daily targets\n')
             set_daily_goals()
-            pass
+
         elif choice == '6':
             # Print a goodbye message and break the loop
             print("Thank you for using the Fitness Tracker. Stay healthy! 💪")
             break
         else:
             print("Invalid choice, please try again.")
-
-
 
 
 if __name__ == "__main__":
