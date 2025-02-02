@@ -18,3 +18,6 @@ This project aims to provide users with a simple fitness tracking tool while rei
 - Variables and data types
 - Lists and functions
 - Conditional statements and loops
+
+## 🎯 Install
+  pip install requests
