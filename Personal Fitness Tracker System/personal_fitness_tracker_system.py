@@ -330,17 +330,19 @@ def reset_progress():
     Clear all data from the workouts and calories lists.
     - Print a confirmation message.
     """
-
+    global calories_total, duration_total
     reset = input("\nEnter your choice: ")
     confirm = input('Type \'reset\' for confirmation or press \'enter\' for continue:')
 
     if confirm == 'reset':
         if reset == '1':
             calories.clear()  # Clear calories list
+            calories_total = 0
             return print("Calories progress is restarted!!!")
 
         elif reset == '2':
             workouts.clear()  # Clear workout list
+            duration_total = 0
             return print("Workout progress is restarted!!!")
 
         elif reset == '3':
