@@ -19,5 +19,6 @@ This project aims to provide users with a simple fitness tracking tool while rei
 - Lists and functions
 - Conditional statements and loops
 
-## 🎯 Install
-  pip install requests
+## ⚙️ Install
+
+    pip install requests
