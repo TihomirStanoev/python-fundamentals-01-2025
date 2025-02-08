@@ -1,8 +1,6 @@
 from get_calorie import nutri_list
 
 # Personal Fitness Tracker System 🏋️‍♂️
-
-
 MAX_DURATION = 400.0 # Workouts maximum duration limit.
 workout_menu = [['🏃', 'run'], ['🚲', 'cycling'], ['💪', 'fitness'], ['🚶‍', 'walk']] # Default meu
 workout_type = 'workout'
